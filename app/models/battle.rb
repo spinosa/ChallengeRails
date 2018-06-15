@@ -69,6 +69,9 @@ class Battle < ApplicationRecord
     if actor != self.recipient
       self.errors[:base] << "You cannot set the outcome of this battle" and return
     end
+    if outcome > Battle::Outcome::NO_CONTEST
+      self.errors[:base] << "You cannot set that outcome" and return
+    end
     
     self.state = Battle::BattleState::COMPLETE
     self.outcome = outcome
