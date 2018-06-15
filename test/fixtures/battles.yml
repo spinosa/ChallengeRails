@@ -2,9 +2,9 @@
 
 one:
   initiator: one
-  recipient: one
+  recipient: two
   description: MyText
-  outcome: 
+  outcome: <%= Battle::Outcome::TBD %>
   state: 
   disputed_at: 2018-06-15 13:25:35
   disputed_by: one
@@ -13,11 +13,33 @@ one:
 
 two:
   initiator: two
-  recipient: two
+  recipient: one
   description: MyText
-  outcome: 
+  outcome: <%= Battle::Outcome::TBD %>
   state: 
   disputed_at: 2018-06-15 13:25:35
   disputed_by: two
   invited_recipient_email: MyString
   invited_recipient_phone_number: MyString
+  
+open_battle:
+  initiator: one
+  recipient: two
+  description: MyText
+  state: <%= Battle::BattleState::OPEN %>
+  outcome: <%= Battle::Outcome::TBD %>
+  
+pending_battle:
+  initiator: one
+  recipient: two
+  description: MyText
+  state: <%= Battle::BattleState::PENDING %>
+  outcome: <%= Battle::Outcome::TBD %>
+  
+completed_battle:
+  initiator: one
+  recipient: two
+  description: MyText
+  state: <%= Battle::BattleState::COMPLETE %>
+  outcome: <%= Battle::Outcome::INITIATOR_LOSS %>
+  outcome: <%= Battle::Outcome::TBD %>
