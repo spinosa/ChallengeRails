@@ -102,6 +102,11 @@ class Battle < ApplicationRecord
     self.disputed_by.try(:screenname)
   end
   
+  # ----------------- Other Helpers -----------------
+  def disputed?
+    self.disputed_by != nil
+  end
+  
   private
   
   # ----------------- After Update -----------------

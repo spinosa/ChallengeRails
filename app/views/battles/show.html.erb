@@ -2,12 +2,12 @@
 
 <p>
   <strong>Initiator:</strong>
-  <%= @battle.initiator %>
+  <%= @battle.initiator.screenname %>
 </p>
 
 <p>
   <strong>Recipient:</strong>
-  <%= @battle.recipient %>
+  <%= @battle.recipient.try(:screename) %>
 </p>
 
 <p>
@@ -17,23 +17,25 @@
 
 <p>
   <strong>Outcome:</strong>
-  <%= @battle.outcome %>
+  <%= outcome_string @battle %>
 </p>
 
 <p>
   <strong>State:</strong>
-  <%= @battle.state %>
+  <%= state_string @battle %>
 </p>
 
-<p>
-  <strong>Disputed at:</strong>
-  <%= @battle.disputed_at %>
-</p>
+<% if @battle.disputed? %>
+  <p>
+    <strong>Disputed at:</strong>
+    <%= @battle.disputed_at %>
+  </p>
 
-<p>
-  <strong>Disputed by:</strong>
-  <%= @battle.disputed_by %>
-</p>
+  <p>
+    <strong>Disputed by:</strong>
+    <%= @battle.disputed_by.try(:screename) %>
+  </p>
+<% end %>
 
 <p>
   <strong>Invited recipient email:</strong>
