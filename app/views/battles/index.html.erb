@@ -12,8 +12,10 @@
       <th>State</th>
       <th>Disputed at</th>
       <th>Disputed by</th>
+      <% if current_user.is_root %>
       <th>Invited recipient email</th>
       <th>Invited recipient phone number</th>
+      <% end %>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -21,18 +23,24 @@
   <tbody>
     <% @battles.each do |battle| %>
       <tr>
-        <td><%= battle.initiator %></td>
-        <td><%= battle.recipient %></td>
+        <td><%= battle.initiator.screenname %></td>
+        <td><%= battle.recipient.try(:screenname) %></td>
         <td><%= battle.description %></td>
         <td><%= battle.outcome %></td>
         <td><%= battle.state %></td>
         <td><%= battle.disputed_at %></td>
-        <td><%= battle.disputed_by %></td>
+        <td><%= battle.disputed_by.try(:screenname) %></td>
+        <% if current_user.is_root %>
         <td><%= battle.invited_recipient_email %></td>
         <td><%= battle.invited_recipient_phone_number %></td>
+        <% end %>
         <td><%= link_to 'Show', battle %></td>
-        <td><%= link_to 'Edit', edit_battle_path(battle) %></td>
-        <td><%= link_to 'Destroy', battle, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if current_user.can_update_battle?(battle)%>
+          <td><%= link_to 'Edit', edit_battle_path(battle) %></td>
+        <% end %>
+        <% if current_user.is_root %>
+          <td><%= link_to 'Destroy', battle, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

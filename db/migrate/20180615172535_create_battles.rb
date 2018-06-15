@@ -1,6 +1,6 @@
 class CreateBattles < ActiveRecord::Migration[5.2]
   def change
-    create_table :battles do |t|
+    create_table :battles, id: :uuid do |t|
       t.references :initiator, references: :users, type: :uuid, null: false
       t.references :recipient, references: :users, type: :uuid
       t.text :description

@@ -26,7 +26,13 @@ class BattlesController < ApplicationController
   # POST /battles
   # POST /battles.json
   def create
-    @battle = Battle.new(battle_params)
+    @battle = Battle.new(battle_params.merge({
+      initiator: current_user, 
+      outcome: Battle::Outcome::TBD, 
+      state: Battle::BattleState::OPEN, 
+      disputed_at: nil
+      })
+    )
 
     respond_to do |format|
       if @battle.save
@@ -43,7 +49,7 @@ class BattlesController < ApplicationController
   # PATCH/PUT /battles/1.json
   def update
     respond_to do |format|
-      if @battle.update(battle_params)
+      if current_user.can_update_battle?(@battle) and @battle.update(battle_params)
         format.html { redirect_to @battle, notice: 'Battle was successfully updated.' }
         format.json { render :show, status: :ok, location: @battle }
       else
@@ -56,10 +62,15 @@ class BattlesController < ApplicationController
   # DELETE /battles/1
   # DELETE /battles/1.json
   def destroy
-    @battle.destroy
     respond_to do |format|
-      format.html { redirect_to battles_url, notice: 'Battle was successfully destroyed.' }
-      format.json { head :no_content }
+      if current_user.is_root
+        @battle.destroy
+        format.html { redirect_to battles_url, notice: 'Battle was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { render :show }
+        format.json { render json: @battle.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -71,6 +82,6 @@ class BattlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def battle_params
-      params.require(:battle).permit(:initiator_id, :recipient_id, :description, :outcome, :state, :disputed_at, :disputed_by_id, :invited_recipient_email, :invited_recipient_phone_number)
+      params.require(:battle).permit(:description, :invited_recipient_email, :invited_recipient_phone_number)
     end
 end

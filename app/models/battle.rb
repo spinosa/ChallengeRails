@@ -5,14 +5,14 @@
 # 5) The initiator may then dispute the recorded outcome
 class Battle < ApplicationRecord
   belongs_to :initiator,   class_name: "User"  
-  belongs_to :recipient,   class_name: "User"  
-  belongs_to :disputed_by, class_name: "User"  
+  belongs_to :recipient,   class_name: "User", optional: true
+  belongs_to :disputed_by, class_name: "User", optional: true
   
   module BattleState
-    OPEN                     = (1 << 0)
+    OPEN                     = (1 << 0) # Created by initiator
     CANCELLED_BY_INITIATOR   = (1 << 1)
     DECLINED_BY_RECIPIENT    = (1 << 2)
-    PENDING                  = (1 << 3) # After receipient accepts, the battle is pending until it's complete
+    PENDING                  = (1 << 3) # After recipient accepts, the battle is pending until it's complete
     COMPLETE                 = (1 << 4) # A disputed Battle remains in the pending state
   end
   

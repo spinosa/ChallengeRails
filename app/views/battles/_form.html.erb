@@ -12,48 +12,18 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :initiator_id %>
-    <%= form.text_field :initiator_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :recipient_id %>
-    <%= form.text_field :recipient_id %>
-  </div>
-
-  <div class="field">
     <%= form.label :description %>
     <%= form.text_area :description %>
   </div>
 
   <div class="field">
-    <%= form.label :outcome %>
-    <%= form.text_field :outcome %>
+    <%= form.label :invited_recipient_email, "Challenge over email:" %>
+    <%= form.text_field :invited_recipient_email, placeholder: "email@example.com" %>
   </div>
 
   <div class="field">
-    <%= form.label :state %>
-    <%= form.text_field :state %>
-  </div>
-
-  <div class="field">
-    <%= form.label :disputed_at %>
-    <%= form.datetime_select :disputed_at %>
-  </div>
-
-  <div class="field">
-    <%= form.label :disputed_by_id %>
-    <%= form.text_field :disputed_by_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :invited_recipient_email %>
-    <%= form.text_field :invited_recipient_email %>
-  </div>
-
-  <div class="field">
-    <%= form.label :invited_recipient_phone_number %>
-    <%= form.text_field :invited_recipient_phone_number %>
+    <%= form.label :invited_recipient_phone_number, "Challenge over text:" %>
+    <%= form.text_field :invited_recipient_phone_number,  placeholder: "(555)123-4567" %>
   </div>
 
   <div class="actions">
