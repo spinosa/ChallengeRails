@@ -1,0 +1,62 @@
+<%= form_with(model: battle, local: true) do |form| %>
+  <% if battle.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(battle.errors.count, "error") %> prohibited this battle from being saved:</h2>
+
+      <ul>
+      <% battle.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :initiator_id %>
+    <%= form.text_field :initiator_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :recipient_id %>
+    <%= form.text_field :recipient_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :outcome %>
+    <%= form.text_field :outcome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :state %>
+    <%= form.text_field :state %>
+  </div>
+
+  <div class="field">
+    <%= form.label :disputed_at %>
+    <%= form.datetime_select :disputed_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :disputed_by_id %>
+    <%= form.text_field :disputed_by_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :invited_recipient_email %>
+    <%= form.text_field :invited_recipient_email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :invited_recipient_phone_number %>
+    <%= form.text_field :invited_recipient_phone_number %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

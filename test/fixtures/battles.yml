@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  initiator: one
+  recipient: one
+  description: MyText
+  outcome: 
+  state: 
+  disputed_at: 2018-06-15 13:25:35
+  disputed_by: one
+  invited_recipient_email: MyString
+  invited_recipient_phone_number: MyString
+
+two:
+  initiator: two
+  recipient: two
+  description: MyText
+  outcome: 
+  state: 
+  disputed_at: 2018-06-15 13:25:35
+  disputed_by: two
+  invited_recipient_email: MyString
+  invited_recipient_phone_number: MyString

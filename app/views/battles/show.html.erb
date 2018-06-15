@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Initiator:</strong>
+  <%= @battle.initiator %>
+</p>
+
+<p>
+  <strong>Recipient:</strong>
+  <%= @battle.recipient %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @battle.description %>
+</p>
+
+<p>
+  <strong>Outcome:</strong>
+  <%= @battle.outcome %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @battle.state %>
+</p>
+
+<p>
+  <strong>Disputed at:</strong>
+  <%= @battle.disputed_at %>
+</p>
+
+<p>
+  <strong>Disputed by:</strong>
+  <%= @battle.disputed_by %>
+</p>
+
+<p>
+  <strong>Invited recipient email:</strong>
+  <%= @battle.invited_recipient_email %>
+</p>
+
+<p>
+  <strong>Invited recipient phone number:</strong>
+  <%= @battle.invited_recipient_phone_number %>
+</p>
+
+<%= link_to 'Edit', edit_battle_path(@battle) %> |
+<%= link_to 'Back', battles_path %>
