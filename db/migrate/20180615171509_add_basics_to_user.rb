@@ -2,7 +2,7 @@ class AddBasicsToUser < ActiveRecord::Migration[5.2]
   def change
     add_column :users, :phone, :string
     add_column :users, :phone_confirmed, :boolean, default: false
-    add_column :users, :screenname, :string
+    add_column :users, :screenname, :string, null: false
     
     add_column :users, :wins_total, :int, default: 0
     add_column :users, :losses_total, :int, default: 0

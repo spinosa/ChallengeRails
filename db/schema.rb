@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 2018_06_15_172535) do
     t.datetime "updated_at", null: false
     t.string "phone"
     t.boolean "phone_confirmed", default: false
-    t.string "screenname"
+    t.string "screenname", null: false
     t.integer "wins_total", default: 0
     t.integer "losses_total", default: 0
     t.integer "wins_when_initiator", default: 0

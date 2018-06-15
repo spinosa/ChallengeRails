@@ -24,4 +24,16 @@ class Battle < ApplicationRecord
     NO_CONTEST      = (1 << 3) # There is no winner or loser
   end
   
+  def initiator_screenname
+    self.initiator.screenname
+  end
+  
+  def recipient_screenname
+    self.recipient.try(:screenname)
+  end
+  
+  def disputed_by_screenname
+    self.disputed_by.try(:screenname)
+  end
+  
 end

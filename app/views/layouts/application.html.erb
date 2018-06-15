@@ -10,6 +10,10 @@
   </head>
 
   <body>
+    <div id="nav">
+      <%= link_to('Logout', destroy_user_session_path, method: :delete) if user_signed_in? %> 
+    </div>
+    
     <div id="notices">
       <p class="notice"><%= notice %></p>
       <p class="alert"><%= alert %></p>
