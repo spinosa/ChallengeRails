@@ -10,6 +10,15 @@ Devise.setup do |config|
   # by default. You can change it below and use your own secret key.
   # config.secret_key = '353ebfe96e7954620bfb432c43d6e028d47e49e2850fc2f52fde6f22a1b763fa4bc8e350aa94fe616e566c5732dbff2b79ad0c644109995e43c1ce8a1dff87a2'
   
+  # Using JWT for the API
+  config.jwt do |jwt|
+    jwt.secret = Rails.application.credentials.jwt_secret_key
+    # By default, only requests *without* a format will be processed by devise-jwt.
+    # We serve html (for backoffice, debugging) and json, therefore we use the format, therefore we enable it:
+    jwt.request_formats = { user: [:json] }
+    jwt.expiration_time = 6.months.to_i
+  end
+  
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'

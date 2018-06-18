@@ -5,6 +5,7 @@ ruby '2.4.2'
 
 # Authentication
 gem 'devise', '~> 4.4'
+gem 'devise-jwt'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.0'

@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   
-  root to: "battles#new"
+  root to: "battles#index"
   
-  devise_for :users
+  devise_for :users, :controllers => {registrations: 'users/registrations', sessions: 'users/sessions'}
+  
   resources :battles do
     post 'cancel',   on: :member, to: 'battles#cancel',   as: :cancel
     post 'decline',  on: :member, to: 'battles#decline',  as: :decline
