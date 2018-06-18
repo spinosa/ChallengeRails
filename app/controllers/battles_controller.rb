@@ -1,5 +1,5 @@
 class BattlesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:index]
   
   before_action :set_battle, only: [:show, :edit, :update, :cancel, :decline, :accept, :complete, :dispute, :destroy]
 
