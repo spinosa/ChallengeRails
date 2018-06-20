@@ -10,12 +10,17 @@
       </ul>
     </div>
   <% end %>
-
+  
   <div class="field">
     <%= form.label :description %>
     <%= form.text_area :description %>
   </div>
 
+  <div class="field">
+    <%= form.label :recipient_screenname, "Opponent" %>
+    <%= form.text_field :recipient_screenname, placeholder: "@screename" %>
+  </div>
+  
   <div class="field">
     <%= form.label :invited_recipient_email, "Challenge over email:" %>
     <%= form.text_field :invited_recipient_email, placeholder: "email@example.com" %>

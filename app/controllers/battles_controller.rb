@@ -6,7 +6,7 @@ class BattlesController < ApplicationController
   # GET /battles
   # GET /battles.json
   def index
-    @battles = Battle.all
+    @battles = Battle.order(created_at: :desc).includes([:initiator, :recipient]).where.not(recipient_id: nil).all
   end
 
   # GET /battles/1
@@ -147,6 +147,6 @@ class BattlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def battle_params
-      params.require(:battle).permit(:description, :invited_recipient_email, :invited_recipient_phone_number)
+      params.require(:battle).permit(:description, :recipient_screenname, :invited_recipient_email, :invited_recipient_phone_number)
     end
 end

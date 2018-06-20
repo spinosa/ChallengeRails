@@ -10,6 +10,9 @@ class User < ApplicationRecord
   has_many :battles_disputed, class_name: "Battle", foreign_key: "disputed_by_id"
   
   validates_presence_of :email, :screenname
+  validates_uniqueness_of :email, :screenname
+  validates_format_of :screenname, with: /\A[a-zA-Z0-9.]+\z/, :message => "Only letters and numbers allowed"
+  validates_length_of :screenname, in: 6..21
   
   def can_update_battle?(battle)
     return self.is_root || self == battle.initiator || self == battle.recipient

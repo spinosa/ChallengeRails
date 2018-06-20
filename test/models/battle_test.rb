@@ -2,6 +2,25 @@ require 'test_helper'
 
 class BattleTest < ActiveSupport::TestCase
   
+  test "can add a valid recipient by screenname" do
+    initiator = users(:one)
+    recipient = users(:two)
+    
+    @battle = Battle.new({initiator: initiator, recipient_screenname: recipient.screenname, description: "=)"})
+    
+    assert @battle.valid?
+  end
+  
+  test "errors if recipient screenname does not exist" do
+    initiator = users(:one)
+
+    @battle = Battle.new({initiator: initiator, recipient_screenname: "cretainlydoesntexist089245lnjk", description: "=("})
+    
+    assert !@battle.valid?
+  end
+  
+  # ------------ State Machinations ------------
+  
   test "Open battle can be Cancelled" do
     battle = battles(:open_battle)
     

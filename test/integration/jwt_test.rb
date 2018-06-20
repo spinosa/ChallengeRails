@@ -12,7 +12,7 @@ class JwtTest < ActionDispatch::IntegrationTest
   
   test "create user should return jwt" do
     assert_difference('User.count') do
-      post user_registration_url(:json), params: {user: { email: "a_brand_new_user@test.com", password: "password", screenname: "brand_new_SC0i24r" }}
+      post user_registration_url(:json), params: {user: { email: "a_brand_new_user@test.com", password: "password", screenname: "brand.new.SC0i24r" }}
     end
     
     assert_response :success
