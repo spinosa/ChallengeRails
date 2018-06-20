@@ -4,7 +4,8 @@ class Users::SearchController < ApplicationController
   # GET /users/screenname
   # GET /users/screenname.json
   def by_screenname
-    @users = User.where('screenname LIKE ?', '%' + params['screenname'] + '%').all
+    screenname = params['screenname'].gsub('@', '')
+    @users = User.where('screenname LIKE ?', '%' + screenname + '%').all
     @users -= [current_user]
     
     respond_to do |format|
