@@ -12,4 +12,8 @@ Rails.application.routes.draw do
     post 'dispute',  on: :member, to: 'battles#dispute',  as: :dispute
   end
   
+  namespace :users do
+    get 'search/screenname/:screenname', to: 'search#by_screenname', as: :search_by_screenname
+  end
+  
 end

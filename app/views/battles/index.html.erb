@@ -26,8 +26,8 @@
         <td><%= battle.initiator.screenname %></td>
         <td><%= battle.recipient.try(:screenname) %></td>
         <td><%= battle.description %></td>
-        <td><%= battle.outcome %></td>
-        <td><%= battle.state %></td>
+        <td><%= outcome_string battle %></td>
+        <td><%= state_string battle %></td>
         <td><%= battle.disputed_at %></td>
         <td><%= battle.disputed_by.try(:screenname) %></td>
         <% if current_user && current_user.is_root %>
