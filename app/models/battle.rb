@@ -23,6 +23,12 @@ class Battle < ApplicationRecord
     DECLINED_BY_RECIPIENT    = (1 << 2)
     PENDING                  = (1 << 3) # After recipient accepts, the battle is pending until it's complete
     COMPLETE                 = (1 << 4) # A disputed Battle remains in the pending state
+    
+    ALL_ACTIVE  = [Battle::BattleState::OPEN, 
+                   Battle::BattleState::PENDING]
+    ALL_ARCHIVE = [Battle::BattleState::CANCELLED_BY_INITIATOR, 
+                   Battle::BattleState::DECLINED_BY_RECIPIENT, 
+                   Battle::BattleState::COMPLETE]
   end
   
   # NB: Outcomes are recorded by the *recipient* using the system of honor

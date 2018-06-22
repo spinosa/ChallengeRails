@@ -6,7 +6,24 @@ class BattlesController < ApplicationController
   # GET /battles
   # GET /battles.json
   def index
-    @battles = Battle.order(created_at: :desc).includes([:initiator, :recipient]).where.not(recipient_id: nil).all
+    @battles = Battle.where.not(recipient_id: nil)
+    
+    if current_user
+      if params[:outbox]
+         @battles = @battles.where(initiator: current_user)
+       elsif params[:inbox]
+         @battles = @battles.where(recipient: current_user)
+       elsif params[:myActive]
+         @battles = @battles.where(initiator: current_user).or(Battle.where(recipient: current_user))
+           .where(state: Battle::BattleState::ALL_ACTIVE)
+       elsif params[:myArchive]
+         @battles = @battles.where(initiator: current_user).or(Battle.where(recipient: current_user))
+         .where(state: Battle::BattleState::ALL_ARCHIVE)
+       end
+    end
+
+    #TODO: Pagination
+    @battles.order(created_at: :desc).includes([:initiator, :recipient]).all
   end
 
   # GET /battles/1
