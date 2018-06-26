@@ -79,7 +79,7 @@ class BattlesController < ApplicationController
   # POST /battles/1b-cd-2e/cancel
   def cancel
     respond_to do |format|
-      if current_user.can_update_battle?(@battle) and @battle.cancel(current_user)
+      if current_user.can_update_battle?(@battle) and @battle.cancel(current_user) and @battle.save
         format.html { redirect_to @battle, notice: 'Battle has been withdrawn.' }
         format.json { render :show, status: :ok, location: @battle }
       else
@@ -92,7 +92,7 @@ class BattlesController < ApplicationController
   # POST /battles/1b-cd-2e/decline
   def decline
     respond_to do |format|
-      if current_user.can_update_battle?(@battle) and @battle.decline(current_user)
+      if current_user.can_update_battle?(@battle) and @battle.decline(current_user) and @battle.save
         format.html { redirect_to @battle, notice: 'Battle has been declined.' }
         format.json { render :show, status: :ok, location: @battle }
       else
@@ -105,7 +105,7 @@ class BattlesController < ApplicationController
   # POST /battles/1b-cd-2e/accept
   def accept
     respond_to do |format|
-      if current_user.can_update_battle?(@battle) and @battle.accept(current_user)
+      if current_user.can_update_battle?(@battle) and @battle.accept(current_user) and @battle.save
         format.html { redirect_to @battle, notice: 'Battle was successfully accepted!' }
         format.json { render :show, status: :ok, location: @battle }
       else
@@ -118,7 +118,7 @@ class BattlesController < ApplicationController
   # POST /battles/1b-cd-2e/complete
   def complete
     respond_to do |format|
-      if current_user.can_update_battle?(@battle) and @battle.complete(params[:outcome], current_user)
+      if current_user.can_update_battle?(@battle) and @battle.complete(params[:outcome], current_user) and @battle.save
         format.html { redirect_to @battle, notice: 'Battle is now complete!  Good for you. ;-]' }
         format.json { render :show, status: :ok, location: @battle }
       else
@@ -131,7 +131,7 @@ class BattlesController < ApplicationController
   # POST /battles/1b-cd-2e/dispute
   def dispute
     respond_to do |format|
-      if current_user.can_update_battle?(@battle) and @battle.dispute(current_user)
+      if current_user.can_update_battle?(@battle) and @battle.dispute(current_user) and @battle.save
         format.html { redirect_to @battle, notice: 'Battle is marked disputed.' }
         format.json { render :show, status: :ok, location: @battle }
       else
