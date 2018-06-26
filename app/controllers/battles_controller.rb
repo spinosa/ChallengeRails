@@ -23,7 +23,7 @@ class BattlesController < ApplicationController
     end
 
     #TODO: Pagination
-    @battles.order(created_at: :desc).includes([:initiator, :recipient]).all
+    @battles = @battles.order(created_at: :desc).includes([:initiator, :recipient]).all
   end
 
   # GET /battles/1
