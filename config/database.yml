@@ -80,6 +80,8 @@ test:
 #
 production:
   <<: *default
-  database: Challenge_production
-  username: <%= Rails.application.credentials.dig(:aws, :rds, :username %>
-  password: <%= Rails.application.credentials.dig(:aws, :rds, :password %>
+  database: <%= ENV['RDS_DB_NAME'] %>
+  username: <%= ENV['RDS_USERNAME'] %>
+  password: <%= ENV['RDS_PASSWORD'] %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
+  port: <%= ENV['RDS_PORT'] %>
