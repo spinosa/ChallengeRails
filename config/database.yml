@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: Challenge_production
-  username: Challenge
-  password: <%= ENV['CHALLENGE_DATABASE_PASSWORD'] %>
+  username: <%= Rails.application.credentials.dig(:aws, :rds, :username %>
+  password: <%= Rails.application.credentials.dig(:aws, :rds, :password %>
