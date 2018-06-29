@@ -16,4 +16,5 @@ Rails.application.routes.draw do
     get 'search/screenname/:screenname', to: 'search#by_screenname', as: :search_by_screenname
   end
   
+  get 'apple-app-site-association', to: 'well_known#apple_app_site_association'
 end
