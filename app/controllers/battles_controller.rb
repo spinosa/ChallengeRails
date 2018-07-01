@@ -117,8 +117,9 @@ class BattlesController < ApplicationController
   
   # POST /battles/1b-cd-2e/complete
   def complete
+    outcome = Integer(params[:outcome])
     respond_to do |format|
-      if current_user.can_update_battle?(@battle) and @battle.set_outcome(params[:outcome], current_user) and @battle.save
+      if current_user.can_update_battle?(@battle) and @battle.set_outcome(outcome, current_user) and @battle.save
         format.html { redirect_to @battle, notice: 'Battle is now complete!  Good for you. ;-]' }
         format.json { render :show, status: :ok, location: @battle }
       else
