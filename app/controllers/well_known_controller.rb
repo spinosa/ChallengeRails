@@ -1,7 +1,8 @@
 class WellKnownController < ApplicationController
   
   def apple_app_site_association
-    render json: {
+    #TODO: Confirm that header has ('Content-Type', 'application/json');
+    render status: 200, json: {
                     "applinks": {
                       "apps": [],
                       "details": [
