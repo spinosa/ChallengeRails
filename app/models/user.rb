@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Snsable
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -14,6 +16,8 @@ class User < ApplicationRecord
   validates_format_of :screenname, with: /\A[a-zA-Z0-9.]+\z/, :message => "Only letters and numbers allowed"
   validates_length_of :screenname, in: 6..21
   
+  after_update :update_sns_push_arn, if: -> { saved_change_to_apns_device_token? }
+  
   def can_update_battle?(battle)
     return self.is_root || self == battle.initiator || self == battle.recipient
   end
@@ -21,4 +25,10 @@ class User < ApplicationRecord
   def as_json(*)
     super.except("is_root")
   end
+  
+  # Update AWS SimpleNotificationService ARN (App Resource Name)
+  def update_sns_push_arn
+    register_device_token
+  end
+  
 end
