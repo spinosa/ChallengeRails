@@ -16,5 +16,9 @@ Rails.application.routes.draw do
     get 'search/screenname/:screenname', to: 'search#by_screenname', as: :search_by_screenname
   end
   
+  # current user
+  get 'current_user', to: 'users/current#show', as: :show_current_user
+  patch 'current_user', to: 'users/current#update', as: :update_current_user
+  
   get 'apple-app-site-association', to: 'well_known#apple_app_site_association'
 end
