@@ -10,6 +10,10 @@ class Battle < ApplicationRecord
   
   after_update :update_win_loss_records, if: -> { saved_change_to_outcome? }
   after_update :update_disputes_records, if: -> { saved_change_to_disputed_by_id? }
+  # remote notifications
+  after_create :push_created_remote_notifications
+  after_update :push_updated_outcome_remote_notifications, if: -> { saved_change_to_outcome? }
+  after_update :push_updated_disputed_remote_notifications, if: -> { saved_change_to_disputed_by_id? }
   
   validates_presence_of :description
   validates_length_of :description, minimum: 1
@@ -153,6 +157,24 @@ class Battle < ApplicationRecord
       def update_disputes_records
         self.initiator.increment!(:disputes_brought_total)
         self.recipient.increment!(:disputes_brought_against_total)
+      end
+      
+      # ----------------- Remote Notifcations Update -----------------
+      
+      def push_created_remote_notifications
+        self.recipient.pushRemoteNotification("#{self.initiator.screenname} challenges you!", {battle_id: self.id}) if self.recipient
+      end
+      
+      def push_updated_outcome_remote_notifications
+        if outcome == Battle::Outcome::INITIATOR_WIN
+          self.initiator.pushRemoteNotification("#{self.recipient.screenname} concedes.  You win!", {battle_id: self.id})
+        elsif outcome == Battle::Outcome::INITIATOR_LOSS
+          self.initiator.pushRemoteNotification("#{self.recipient.screenname} claims victory over you.", {battle_id: self.id})
+        end
+      end
+      
+      def push_updated_disputed_remote_notifications
+        self.recipient.pushRemoteNotification("#{self.initiator.screenname} disputes your claim.", {battle_id: self.id})
       end
     
       # ----------------- Validation -----------------

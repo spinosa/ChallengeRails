@@ -49,17 +49,20 @@ module Snsable
     end
   end
   
-  def push(message)
+  def pushRemoteNotification(message, custom_data)
+    return unless self.sns_platform_endpoint_arn
+    
     note = { aps: 
               { alert: message,
                 #badge: 1,
                 sound: "default" 
               }
             }
-    message = { APNS_SANDBOX: note.to_json, APNS: note.to_json }
+    note.merge!(custom_data) if custom_data.is_a?(Hash)
+    msg = { APNS_SANDBOX: note.to_json, APNS: note.to_json }
     @@sns.publish({
       target_arn: self.sns_platform_endpoint_arn,
-      message: message.to_json,
+      message: msg.to_json,
       message_structure: :json
     })
   end

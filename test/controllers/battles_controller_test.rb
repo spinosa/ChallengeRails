@@ -61,4 +61,70 @@ class BattlesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to battles_url
   end
+  
+  # -- Actions --
+  
+  test "should cancel" do
+    sign_in users(:one)
+    
+    @battle = battles(:open_battle)
+    
+    post cancel_battle_url(@battle)
+    
+    assert_equal Battle::BattleState::CANCELLED_BY_INITIATOR, @battle.reload.state
+  end
+  
+  test "should decline" do
+    sign_in users(:two)
+    
+    @battle = battles(:open_battle)
+    
+    post decline_battle_url(@battle)
+    
+    assert_equal Battle::BattleState::DECLINED_BY_RECIPIENT, @battle.reload.state
+  end
+  
+  test "should accept" do
+    sign_in users(:two)
+    
+    @battle = battles(:open_battle)
+    
+    post accept_battle_url(@battle)
+    
+    assert_equal Battle::BattleState::PENDING, @battle.reload.state
+  end
+  
+  test "should complete with initiator win" do
+    sign_in users(:two)
+    
+    @battle = battles(:pending_battle)
+    
+    post complete_battle_url(@battle), params: { outcome: Battle::Outcome::INITIATOR_WIN }
+    
+    assert_equal Battle::BattleState::COMPLETE, @battle.reload.state
+    assert_equal Battle::Outcome::INITIATOR_WIN, @battle.reload.outcome
+  end
+  
+  test "should complete with initiator loss" do
+    sign_in users(:two)
+    
+    @battle = battles(:pending_battle)
+    
+    post complete_battle_url(@battle), params: { outcome: Battle::Outcome::INITIATOR_LOSS }
+    
+    assert_equal Battle::BattleState::COMPLETE, @battle.reload.state
+    assert_equal Battle::Outcome::INITIATOR_LOSS, @battle.reload.outcome
+  end
+  
+  test "should dispute" do
+    sign_in users(:one)
+    
+    @battle = battles(:completed_battle)
+    
+    post dispute_battle_url(@battle)
+    
+    assert_equal Battle::BattleState::COMPLETE, @battle.reload.state
+    assert_equal users(:one), @battle.reload.disputed_by
+  end
+  
 end
