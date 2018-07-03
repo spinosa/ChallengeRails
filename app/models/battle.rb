@@ -12,6 +12,7 @@ class Battle < ApplicationRecord
   after_update :update_disputes_records, if: -> { saved_change_to_disputed_by_id? }
   # remote notifications
   after_create :push_created_remote_notifications
+  after_update :push_updated_state_remote_notifications, if: -> { saved_change_to_state? }
   after_update :push_updated_outcome_remote_notifications, if: -> { saved_change_to_outcome? }
   after_update :push_updated_disputed_remote_notifications, if: -> { saved_change_to_disputed_by_id? }
   
@@ -163,6 +164,12 @@ class Battle < ApplicationRecord
       
       def push_created_remote_notifications
         self.recipient.pushRemoteNotification("#{self.initiator.screenname} challenges you!", {battle_id: self.id}) if self.recipient
+      end
+      
+      def push_updated_state_remote_notifications
+        if state_before_last_save == Battle::BattleState::OPEN && state == Battle::BattleState::PENDING
+          self.initiator.pushRemoteNotification("#{self.recipient.screenname} accepts your challenge...", {battle_id: self.id})
+        end
       end
       
       def push_updated_outcome_remote_notifications
