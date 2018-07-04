@@ -38,7 +38,7 @@ module Snsable
           endpoint_arn: self.sns_platform_endpoint_arn,
           attributes: {
             "Token" => self.apns_device_token,
-            "CustomUserData" => "user_id:#{self.id}",
+            "CustomUserData" => "screenname:#{self.screenname};user_id:#{self.id}",
           }
         })
         #expecting an empty response
