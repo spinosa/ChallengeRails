@@ -78,7 +78,7 @@ module Snsable
         resp = @@sns.create_platform_endpoint({
           platform_application_arn: APPLICATION_ARN,
           token: self.apns_device_token,
-          custom_user_data: "screenname:#{self.screenname};user_id:#{self.id}",,
+          custom_user_data: "screenname:#{self.screenname};user_id:#{self.id}",
         })
     
         self.update(sns_platform_endpoint_arn: resp.endpoint_arn)
