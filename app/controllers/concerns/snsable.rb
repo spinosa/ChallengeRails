@@ -60,11 +60,15 @@ module Snsable
             }
     note.merge!(custom_data) if custom_data.is_a?(Hash)
     msg = { APNS_SANDBOX: note.to_json, APNS: note.to_json }
-    @@sns.publish({
-      target_arn: self.sns_platform_endpoint_arn,
-      message: msg.to_json,
-      message_structure: :json
-    })
+    begin
+      @@sns.publish({
+        target_arn: self.sns_platform_endpoint_arn,
+        message: msg.to_json,
+        message_structure: :json
+      })
+    rescue Aws::SNS::Errors::ServiceError
+      # rescues all service API errors
+    end
   end
   
   private 
