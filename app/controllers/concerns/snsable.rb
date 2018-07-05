@@ -75,33 +75,31 @@ module Snsable
   def sns_platform_endpoint_arn_for_sandbox(sandbox)
     return (sandbox ? self.sns_sandbox_platform_endpoint_arn : self.sns_platform_endpoint_arn)
   end
-  
-  private 
-  
-    def application_arn_for_sandbox(sandbox)
-      return (sandbox ? 
-        "arn:aws:sns:us-east-1:349442810440:app/APNS_SANDBOX/Challenge_APNS_Development" :
-        "arn:aws:sns:us-east-1:349442810440:app/APNS/Challenge_APNS_Production" )
-    end
-  
-    def create_platform_endpoint_for_sandbox(sandbox)
-      begin
-        resp = @@sns.create_platform_endpoint({
-          platform_application_arn: application_arn_for_sandbox(sandbox),
-          token: self.apns_device_token_for_sandbox(sandbox),
-          custom_user_data: self.sns_custom_user_data,
-        })
     
-        sandbox ? 
-          self.update(sns_sandbox_platform_endpoint_arn: resp.endpoint_arn) :
-          self.update(sns_platform_endpoint_arn: resp.endpoint_arn)
-      rescue Aws::SNS::Errors::ServiceError
-        #?
-      end
+  def application_arn_for_sandbox(sandbox)
+    return (sandbox ? 
+      "arn:aws:sns:us-east-1:349442810440:app/APNS_SANDBOX/Challenge_APNS_Development" :
+      "arn:aws:sns:us-east-1:349442810440:app/APNS/Challenge_APNS_Production" )
+  end
+
+  def create_platform_endpoint_for_sandbox(sandbox)
+    begin
+      resp = @@sns.create_platform_endpoint({
+        platform_application_arn: application_arn_for_sandbox(sandbox),
+        token: self.apns_device_token_for_sandbox(sandbox),
+        custom_user_data: self.sns_custom_user_data,
+      })
+  
+      sandbox ? 
+        self.update(sns_sandbox_platform_endpoint_arn: resp.endpoint_arn) :
+        self.update(sns_platform_endpoint_arn: resp.endpoint_arn)
+    rescue Aws::SNS::Errors::ServiceError
+      #?
     end
-    
-    def sns_custom_user_data
-      return "screenname:#{self.screenname};user_id:#{self.id}"
-    end
+  end
+  
+  def sns_custom_user_data
+    return "screenname:#{self.screenname};user_id:#{self.id}"
+  end
   
 end
