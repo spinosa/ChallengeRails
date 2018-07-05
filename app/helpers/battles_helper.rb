@@ -24,7 +24,7 @@ module BattlesHelper
     when Battle::Outcome::INITIATOR_WIN 
       return "Winner: #{b.initiator.screenname}"
     when Battle::Outcome::INITIATOR_LOSS 
-      return "Winner: #{b.recipient.screename}"
+      return "Winner: #{b.recipient.screenname}"
     when Battle::Outcome::NO_CONTEST 
       return "No Contest"
     else

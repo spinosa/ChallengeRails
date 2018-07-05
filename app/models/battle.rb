@@ -49,7 +49,7 @@ class Battle < ApplicationRecord
     if recipient = User.find_by_screenname(sn.gsub('@', ''))
       self.recipient = recipient
     else
-      @invalid_recipient_screename = sn
+      @invalid_recipient_screenname = sn
     end
   end
   
@@ -193,8 +193,8 @@ class Battle < ApplicationRecord
       end
       
       def was_not_given_invalid_recipient_screenname
-        unless @invalid_recipient_screename.blank?
-          self.errors.add(:recipient_screename, "not found: #{@invalid_recipient_screename}")
+        unless @invalid_recipient_screenname.blank?
+          self.errors.add(:recipient_screenname, "not found: #{@invalid_recipient_screenname}")
         end
       end
 end
