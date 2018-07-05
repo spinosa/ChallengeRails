@@ -12,6 +12,7 @@ module Snsable
   
   # Makes sure the user's current APNS Device Token (from their iOS device) is associated with a valid SNS endpoint ARN (used to push)
   def register_device_token_for_sandbox(sandbox)
+    return unless self.apns_device_token_for_sandbox(sandbox)
       
     # 1) Make sure user has an endpoint ARN
     if self.sns_platform_endpoint_arn_for_sandbox(sandbox) == nil
