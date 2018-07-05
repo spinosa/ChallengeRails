@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_02_153504) do
+ActiveRecord::Schema.define(version: 2018_07_05_133635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -70,6 +70,8 @@ ActiveRecord::Schema.define(version: 2018_07_02_153504) do
     t.boolean "is_root", default: false
     t.string "apns_device_token"
     t.string "sns_platform_endpoint_arn"
+    t.string "apns_sandbox_device_token"
+    t.string "sns_sandbox_platform_endpoint_arn"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["screenname"], name: "index_users_on_screenname", unique: true

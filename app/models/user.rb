@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validates_length_of :screenname, in: 6..21
   
   after_update :update_sns_push_arn, if: -> { saved_change_to_apns_device_token? }
+  after_update :update_sandbox_sns_push_arn, if: -> { saved_change_to_apns_sandbox_device_token? }
   
   def can_update_battle?(battle)
     return self.is_root || self == battle.initiator || self == battle.recipient
@@ -28,7 +29,11 @@ class User < ApplicationRecord
   
   # Update AWS SimpleNotificationService ARN (App Resource Name)
   def update_sns_push_arn
-    register_device_token
+    register_device_token_for_sandbox(false)
+  end
+  
+  def update_sandbox_sns_push_arn
+    register_device_token_for_sandbox(true)
   end
   
 end
