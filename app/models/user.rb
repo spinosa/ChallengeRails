@@ -23,10 +23,6 @@ class User < ApplicationRecord
     return self.is_root || self == battle.initiator || self == battle.recipient
   end
   
-  def as_json(*)
-    super.except("is_root")
-  end
-  
   # Update AWS SimpleNotificationService ARN (App Resource Name)
   def update_sns_push_arn
     register_device_token_for_sandbox(false)
