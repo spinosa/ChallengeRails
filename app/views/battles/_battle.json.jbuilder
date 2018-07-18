@@ -1,4 +1,4 @@
-json.extract! battle, :id, :description, :outcome, :state, :disputed_at, :created_at, :updated_at
+json.extract! battle, :id, :description, :battle_type, :outcome, :state, :disputed_at, :created_at, :updated_at
 json.url battle_url(battle, format: :json)
 
 if current_user == battle.initiator

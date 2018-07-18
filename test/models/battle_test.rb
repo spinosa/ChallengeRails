@@ -115,6 +115,72 @@ class BattleTest < ActiveSupport::TestCase
     assert_equal Battle::BattleState::COMPLETE, battle.state
   end
   
+  test "Pending dare-type battle can be Completed (and lost) by recipieint" do
+    battle = battles(:pending_dare_battle)
+    
+    assert_difference('battle.recipient.losses_when_recipient', 1) do
+      assert_difference('battle.recipient.losses_total', 1) do
+        assert_difference('battle.initiator.wins_when_initiator', 0) do
+          assert_difference('battle.initiator.wins_total', 0) do
+            assert_difference('battle.initiator.losses_when_initiator', 0) do
+              assert_difference('battle.initiator.losses_total', 0) do
+                battle.set_outcome(Battle::Outcome::RECIPIENT_DARE_LOSS, battle.recipient)
+                battle.save
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    assert_equal Battle::Outcome::RECIPIENT_DARE_LOSS, battle.outcome
+    assert_equal Battle::BattleState::COMPLETE, battle.state
+  end
+  
+  test "Pending dare-type battle can be Completed (and won) by recipieint" do
+    battle = battles(:pending_dare_battle)
+    
+    assert_difference('battle.recipient.wins_when_recipient', 1) do
+      assert_difference('battle.recipient.wins_total', 1) do
+        assert_difference('battle.initiator.wins_when_initiator', 0) do
+          assert_difference('battle.initiator.wins_total', 0) do
+            assert_difference('battle.initiator.losses_when_initiator', 0) do
+              assert_difference('battle.initiator.losses_total', 0) do
+                battle.set_outcome(Battle::Outcome::RECIPIENT_DARE_WIN, battle.recipient)
+                battle.save
+              end
+            end
+          end
+        end
+      end
+    end
+    
+    assert_equal Battle::Outcome::RECIPIENT_DARE_WIN, battle.outcome
+    assert_equal Battle::BattleState::COMPLETE, battle.state
+  end
+  
+  test "Pending dare battle cannot be Completed by recipient in non-dare state" do
+    battle = battles(:pending_dare_battle)
+    assert_equal Battle::Outcome::TBD, battle.outcome
+    assert_equal Battle::BattleState::PENDING, battle.state
+    
+    battle.set_outcome(Battle::Outcome::INITIATOR_WIN, battle.recipient)
+    
+    assert_equal Battle::Outcome::TBD, battle.outcome
+    assert_equal Battle::BattleState::PENDING, battle.state
+  end
+  
+  test "Pending challenge battle cannot be Completed by recipient in dare state" do
+    battle = battles(:pending_battle)
+    assert_equal Battle::Outcome::TBD, battle.outcome
+    assert_equal Battle::BattleState::PENDING, battle.state
+    
+    battle.set_outcome(Battle::Outcome::RECIPIENT_DARE_WIN, battle.recipient)
+    
+    assert_equal Battle::Outcome::TBD, battle.outcome
+    assert_equal Battle::BattleState::PENDING, battle.state
+  end
+  
   test "Pending battle cannot be Completed by initiator" do
     battle = battles(:pending_battle)
     assert_equal Battle::Outcome::TBD, battle.outcome

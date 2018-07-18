@@ -22,6 +22,11 @@ class Battle < ApplicationRecord
   validate :has_or_invited_recipient 
   validate :was_not_given_invalid_recipient_screenname
   
+  module BattleType
+    CHALLENGE = 0 # Traditional me vs. you; my victory is your defeat
+    DARE = 1      # Outcome only impacts the recipient (ie. the dared party)
+  end
+  
   module BattleState
     OPEN                     = (1 << 0) # Created by initiator
     CANCELLED_BY_INITIATOR   = (1 << 1)
@@ -38,10 +43,14 @@ class Battle < ApplicationRecord
   
   # NB: Outcomes are recorded by the *recipient* using the system of honor
   module Outcome
-    TBD             = (1 << 0) # Battle hasn't taken place yet
-    INITIATOR_WIN   = (1 << 1) # Recipient Lost
-    INITIATOR_LOSS  = (1 << 2) # Recipient Won
-    NO_CONTEST      = (1 << 3) # There is no winner or loser
+    TBD                 = (1 << 0) # Battle hasn't taken place yet
+    # Challenge Type
+    INITIATOR_WIN       = (1 << 1) # Recipient Lost
+    INITIATOR_LOSS      = (1 << 2) # Recipient Won
+    NO_CONTEST          = (1 << 3) # There is no winner or loser
+    # Dare Type
+    RECIPIENT_DARE_WIN  = (1 << 4) # Recipient completed dare
+    RECIPIENT_DARE_LOSS = (1 << 5) # Recdipient failed dare
   end
   
   def recipient_screenname=(sn)
@@ -95,8 +104,11 @@ class Battle < ApplicationRecord
     if actor != self.recipient
       self.errors[:base] << "You cannot set the outcome of this battle" and return
     end
-    if outcome > Battle::Outcome::NO_CONTEST
+    if outcome > Battle::Outcome::RECIPIENT_DARE_LOSS
       self.errors[:base] << "You cannot set that outcome" and return
+    end
+    if !outcome_valid_for_type(outcome)
+      self.errors[:base] << "You cannot set that type of outcome on this type of battle" and return
     end
     
     self.state = Battle::BattleState::COMPLETE
@@ -152,6 +164,15 @@ class Battle < ApplicationRecord
           self.initiator.increment!(:losses_when_initiator)
           self.recipient.increment!(:wins_total)
           self.recipient.increment!(:wins_when_recipient)
+          
+        elsif outcome == Battle::Outcome::RECIPIENT_DARE_WIN
+          self.recipient.increment!(:wins_total)
+          self.recipient.increment!(:wins_when_recipient)
+          
+        elsif outcome == Battle::Outcome::RECIPIENT_DARE_LOSS
+          self.recipient.increment!(:losses_total)
+          self.recipient.increment!(:losses_when_recipient)
+          
         end
       end
     
@@ -177,6 +198,10 @@ class Battle < ApplicationRecord
           self.initiator.pushRemoteNotification("#{self.recipient.screenname} concedes.  You win!", {battle_id: self.id})
         elsif outcome == Battle::Outcome::INITIATOR_LOSS
           self.initiator.pushRemoteNotification("#{self.recipient.screenname} claims victory over you.", {battle_id: self.id})
+        elsif outcome == Battle::Outcome::RECIPIENT_DARE_WIN
+          self.initiator.pushRemoteNotification("#{self.recipient.screenname} did it.  They actually did it!", {battle_id: self.id})
+        elsif outcome == Battle::Outcome::RECIPIENT_DARE_LOSS
+          self.initiator.pushRemoteNotification("#{self.recipient.screenname} failed.  You were right; they won't.", {battle_id: self.id})
         end
       end
       
@@ -195,6 +220,20 @@ class Battle < ApplicationRecord
       def was_not_given_invalid_recipient_screenname
         unless @invalid_recipient_screenname.blank?
           self.errors.add(:recipient_screenname, "not found: #{@invalid_recipient_screenname}")
+        end
+      end
+      
+      def outcome_valid_for_type(outcome)
+        return true if outcome == Battle::Outcome::TBD
+        
+        if self.battle_type == Battle::BattleType::CHALLENGE
+          return [Battle::Outcome::INITIATOR_WIN, Battle::Outcome::INITIATOR_LOSS, Battle::Outcome::NO_CONTEST].include? outcome
+          
+        elsif self.battle_type == Battle::BattleType::DARE
+          return [Battle::Outcome::RECIPIENT_DARE_WIN, Battle::Outcome::RECIPIENT_DARE_LOSS].include? outcome
+        else
+          #assertion failure
+          return false
         end
       end
 end

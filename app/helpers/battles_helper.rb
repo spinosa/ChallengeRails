@@ -32,4 +32,15 @@ module BattlesHelper
     end
   end
   
+  def battle_type_string(b)
+    case b.battle_type
+    when Battle::BattleType::CHALLENGE
+      return "Challenge"
+    when Battle::BattleType::DARE
+      return "Dare"
+    else
+      return "?"
+    end
+  end
+  
 end

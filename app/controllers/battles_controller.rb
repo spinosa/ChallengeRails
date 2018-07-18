@@ -165,6 +165,6 @@ class BattlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def battle_params
-      params.require(:battle).permit(:description, :recipient_screenname, :invited_recipient_email, :invited_recipient_phone_number)
+      params.require(:battle).permit(:description, :recipient_screenname, :invited_recipient_email, :invited_recipient_phone_number, :battle_type)
     end
 end

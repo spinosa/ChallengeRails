@@ -116,6 +116,28 @@ class BattlesControllerTest < ActionDispatch::IntegrationTest
     assert_equal Battle::Outcome::INITIATOR_LOSS, @battle.reload.outcome
   end
   
+  test "should complete with recipient dare win" do
+    sign_in users(:two)
+    
+    @battle = battles(:pending_dare_battle)
+    
+    post complete_battle_url(@battle), params: { outcome: Battle::Outcome::RECIPIENT_DARE_WIN }
+    
+    assert_equal Battle::BattleState::COMPLETE, @battle.reload.state
+    assert_equal Battle::Outcome::RECIPIENT_DARE_WIN, @battle.reload.outcome
+  end
+  
+  test "should complete with recipient dare loss" do
+    sign_in users(:two)
+    
+    @battle = battles(:pending_dare_battle)
+    
+    post complete_battle_url(@battle), params: { outcome: Battle::Outcome::RECIPIENT_DARE_LOSS }
+    
+    assert_equal Battle::BattleState::COMPLETE, @battle.reload.state
+    assert_equal Battle::Outcome::RECIPIENT_DARE_LOSS, @battle.reload.outcome
+  end
+  
   test "should dispute" do
     sign_in users(:one)
     

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_05_133635) do
+ActiveRecord::Schema.define(version: 2018_07_18_154115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2018_07_05_133635) do
     t.string "invited_recipient_phone_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "battle_type", default: 0
     t.index ["disputed_by_id"], name: "index_battles_on_disputed_by_id"
     t.index ["initiator_id"], name: "index_battles_on_initiator_id"
     t.index ["invited_recipient_email"], name: "index_battles_on_invited_recipient_email"

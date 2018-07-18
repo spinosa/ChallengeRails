@@ -30,6 +30,15 @@ open_battle:
   outcome: <%= Battle::Outcome::TBD %>
   
 pending_battle:
+  battle_type: <%= Battle::BattleType::CHALLENGE %>
+  initiator: one
+  recipient: two
+  description: MyText
+  state: <%= Battle::BattleState::PENDING %>
+  outcome: <%= Battle::Outcome::TBD %>
+  
+pending_dare_battle:
+  battle_type: <%= Battle::BattleType::DARE %>
   initiator: one
   recipient: two
   description: MyText
