@@ -14,8 +14,10 @@ class BattlesController < ApplicationController
        elsif params[:inbox]
          @battles = @battles.where(recipient: current_user)
        elsif params[:myActive]
-         @battles = @battles.where(initiator: current_user).or(Battle.where(recipient: current_user))
-           .where(state: Battle::BattleState::ALL_ACTIVE)
+         @battles = @battles
+           .where(initiator: current_user)
+             .or(Battle.where(recipient: current_user))
+             .where(state: Battle::BattleState::ALL_ACTIVE)
        elsif params[:myArchive]
          @battles = @battles.where(initiator: current_user).or(Battle.where(recipient: current_user))
          .where(state: Battle::BattleState::ALL_ARCHIVE)
