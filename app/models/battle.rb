@@ -185,9 +185,15 @@ class Battle < ApplicationRecord
       
       def push_created_remote_notifications
         if self.battle_type == Battle::BattleType::CHALLENGE
-          self.recipient.pushRemoteNotification("@#{self.initiator.screenname} challenges you!", {battle_id: self.id}) if self.recipient
+          self.recipient.pushBattleRemoteNotification(self, 
+            {title: "@#{self.initiator.screenname} challenges you!", 
+             body: self.description}) if self.recipient
+             
         elsif self.battle_type == Battle::BattleType::DARE
-          self.recipient.pushRemoteNotification("\"You won't...\" -@#{self.initiator.screenname}", {battle_id: self.id}) if self.recipient
+          self.recipient.pushBattleRemoteNotification(self,
+            {title: "@#{self.initiator.screenname}", 
+             subtitle: "\"You won't...\"",
+             body: self.description}) if self.recipient
         else
           #assertion failure
         end
@@ -195,24 +201,45 @@ class Battle < ApplicationRecord
       
       def push_updated_state_remote_notifications
         if state_before_last_save == Battle::BattleState::OPEN && state == Battle::BattleState::PENDING
-          self.initiator.pushRemoteNotification("@#{self.recipient.screenname} accepts your challenge...", {battle_id: self.id})
+          self.initiator.pushBattleRemoteNotification(self,
+            {title: "Challenge accepted",
+             subtitle: "@#{self.recipient.screenname}",
+             body: self.description})
         end
       end
       
       def push_updated_outcome_remote_notifications
         if outcome == Battle::Outcome::INITIATOR_WIN
-          self.initiator.pushRemoteNotification("@#{self.recipient.screenname} concedes.  You win!", {battle_id: self.id})
+          self.initiator.pushBattleRemoteNotification(self,
+            {title: "You win!",
+             subtitle: "@#{self.recipient.screenname} concedes.",
+             body: self.description})
+             
         elsif outcome == Battle::Outcome::INITIATOR_LOSS
-          self.initiator.pushRemoteNotification("@#{self.recipient.screenname} claims victory over you.", {battle_id: self.id})
+          self.initiator.pushBattleRemoteNotification(self,
+            {title: "@#{self.recipient.screenname} claims victory over you.",
+             body: self.description})
+          
         elsif outcome == Battle::Outcome::RECIPIENT_DARE_WIN
-          self.initiator.pushRemoteNotification("@#{self.recipient.screenname} did it.  They actually did it!", {battle_id: self.id})
+          self.initiator.pushBattleRemoteNotification(self,
+            {title: "@#{self.recipient.screenname} did it.",
+             subtitle: "They actually did it!",
+             body: self.description})
+          
         elsif outcome == Battle::Outcome::RECIPIENT_DARE_LOSS
-          self.initiator.pushRemoteNotification("@#{self.recipient.screenname} failed.  You were right; they won't.", {battle_id: self.id})
+          self.initiator.pushBattleRemoteNotification(self,
+            {title: "@#{self.recipient.screenname} failed.",
+             subtitle: "You were right; they won't.",
+             body: self.description})
+          
         end
       end
       
       def push_updated_disputed_remote_notifications
-        self.recipient.pushRemoteNotification("@#{self.initiator.screenname} disputes your claim.", {battle_id: self.id})
+        self.recipient.pushBattleRemoteNotification(self,
+          {title: "@#{self.initiator.screenname} disputes your claim.",
+          body: self.description})
+        
       end
     
       # ----------------- Validation -----------------

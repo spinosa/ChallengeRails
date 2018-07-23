@@ -47,16 +47,30 @@ module Snsable
     end
   end
   
-  def pushRemoteNotification(message, custom_data, sandbox = !Rails.env.production?)
-    return unless self.sns_platform_endpoint_arn_for_sandbox(sandbox)
-    
+  def pushBattleRemoteNotification(battle, alert, sandbox = !Rails.env.production?)
+    note = { aps: 
+              { alert: alert,
+                sound: "default",
+                'thread-id': battle.id 
+              },
+              battle_id: battle.id
+            }
+    pushRemoteNotification(note, sandbox)
+  end
+  
+  def pushSimpleRemoteNotification(message, custom_data, sandbox = !Rails.env.production?) 
     note = { aps: 
               { alert: message,
-                #badge: 1,
                 sound: "default" 
               }
             }
     note.merge!(custom_data) if custom_data.is_a?(Hash)
+    pushRemoteNotification(note, sandbox)
+  end
+  
+  def pushRemoteNotification(note, sandbox = !Rails.env.production?)
+    return unless self.sns_platform_endpoint_arn_for_sandbox(sandbox)
+    
     msg = { APNS_SANDBOX: note.to_json, APNS: note.to_json }
     begin
       @@sns.publish({
