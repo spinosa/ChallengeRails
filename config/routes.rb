@@ -21,4 +21,5 @@ Rails.application.routes.draw do
   patch 'current_user', to: 'users/current#update', as: :update_current_user
   
   get 'apple-app-site-association', to: 'well_known#apple_app_site_association'
+  get '.well-known/apple-app-site-association', to: 'well_known#apple_app_site_association'
 end
