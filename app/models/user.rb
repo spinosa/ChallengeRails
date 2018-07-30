@@ -14,7 +14,7 @@ class User < ApplicationRecord
   validates :screenname, presence: :true, uniqueness: { case_sensitive: false }
   validates :email, presence: :true, uniqueness: { case_sensitive: false }
   validates_format_of :screenname, with: /\A[a-zA-Z0-9.]+\z/, :message => "Only letters and numbers allowed"
-  validates_length_of :screenname, in: 6..21
+  validates_length_of :screenname, in: 4..21
   
   after_update :update_sns_push_arn, if: -> { saved_change_to_apns_device_token? }
   after_update :update_sandbox_sns_push_arn, if: -> { saved_change_to_apns_sandbox_device_token? }
